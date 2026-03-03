@@ -78,6 +78,11 @@
     letter-spacing: 0.1em;
     text-decoration: none;
   }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
     color: var(--muted);
@@ -88,6 +93,80 @@
     font-family: var(--font-mono);
   }
   .nav-links a:hover { color: var(--accent); }
+
+  /* ── TRANSLATE BUTTON ── */
+  .translate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 2px;
+    cursor: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+  }
+  .translate-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(232,255,71,0.06);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .translate-btn:hover {
+    border-color: rgba(232,255,71,0.4);
+    color: var(--accent);
+  }
+  .translate-btn:hover::before { opacity: 1; }
+  .translate-btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .translate-btn svg {
+    width: 13px; height: 13px;
+    flex-shrink: 0;
+  }
+  .translate-btn .btn-spinner {
+    width: 11px; height: 11px;
+    border: 1.5px solid rgba(232,255,71,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Translation overlay feedback */
+  .translate-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--surface2);
+    border: 1px solid rgba(232,255,71,0.25);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 0.6rem 1.4rem;
+    border-radius: 2px;
+    z-index: 9997;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+  .translate-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
   /* Noise overlay */
   body::before {
@@ -608,16 +687,26 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<div class="translate-toast" id="translateToast"></div>
 
 <nav>
   <a href="#" class="nav-logo">IN/</a>
-  <ul class="nav-links">
-    <li><a href="#about">Sobre mí</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experiencia</a></li>
-    <li><a href="#certifications">Certs</a></li>
-    <li><a href="#contact">Contacto</a></li>
-  </ul>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about" data-es="Sobre mí" data-en="About">Sobre mí</a></li>
+      <li><a href="#skills" data-es="Skills" data-en="Skills">Skills</a></li>
+      <li><a href="#experience" data-es="Experiencia" data-en="Experience">Experiencia</a></li>
+      <li><a href="#certifications" data-es="Certs" data-en="Certs">Certs</a></li>
+      <li><a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a></li>
+    </ul>
+    <button class="translate-btn" id="translateBtn" title="Translate to English">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 5h7M5 2v3M11 5c-.667 2.667-2.333 4.667-4 6M7.5 9c.833.833 2 1.5 3.5 2"/>
+        <path d="M13 19l2-5 2 5M14.6 17h2.8M20 5h-8M16 5v3"/>
+      </svg>
+      <span id="translateLabel">EN</span>
+    </button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -626,16 +715,16 @@
   <div class="hero-grid"></div>
 
   <div class="hero-content">
-    <p class="hero-tag">Full Stack Developer</p>
+    <p class="hero-tag" data-es="Full Stack Developer" data-en="Full Stack Developer">Full Stack Developer</p>
     <h1>
       <span class="line"><span>Iker</span></span>
       <span class="line"><span>Navas</span></span>
       <span class="line"><span>García.</span></span>
     </h1>
-    <p class="hero-desc">Desarrollador web full stack y técnico informático apasionado por construir interfaces y sistemas que funcionan de verdad. Badalona, España.</p>
+    <p class="hero-desc" data-es="Desarrollador web full stack y técnico informático apasionado por construir interfaces y sistemas que funcionan de verdad. Badalona, España." data-en="Full stack web developer and IT technician passionate about building interfaces and systems that truly work. Badalona, Spain.">Desarrollador web full stack y técnico informático apasionado por construir interfaces y sistemas que funcionan de verdad. Badalona, España.</p>
     <div class="hero-ctas">
-      <a href="#contact" class="btn btn-primary">Contactar →</a>
-      <a href="#skills" class="btn btn-outline">Ver skills</a>
+      <a href="#contact" class="btn btn-primary" data-es="Contactar →" data-en="Get in touch →">Contactar →</a>
+      <a href="#skills" class="btn btn-outline" data-es="Ver skills" data-en="View skills">Ver skills</a>
     </div>
   </div>
 
@@ -649,7 +738,7 @@
         </div>
       </div>
       <div class="hero-card-status">
-        <span class="status-dot"></span>Disponible para proyectos
+        <span class="status-dot"></span><span data-es="Disponible para proyectos" data-en="Available for projects">Disponible para proyectos</span>
       </div>
       <div class="hero-card-skills">
         <span class="skill-pill">React</span>
@@ -670,31 +759,31 @@
 <!-- ABOUT -->
 <section id="about">
   <div>
-    <p class="section-label reveal">01 — Sobre mí</p>
-    <h2 class="section-title reveal">Código + Redes.<br>Todo en uno.</h2>
+    <p class="section-label reveal" data-es="01 — Sobre mí" data-en="01 — About me">01 — Sobre mí</p>
+    <h2 class="section-title reveal" data-es="Código + Redes.<br>Todo en uno." data-en="Code + Networks.<br>All in one.">Código + Redes.<br>Todo en uno.</h2>
     <div class="about-text reveal">
-      <p>Soy un desarrollador full stack con formación en CFGS de Desarrollo de Aplicaciones Web, complementada con un sólido background en sistemas y redes. Esto me permite entender los proyectos desde la interfaz hasta la infraestructura.</p>
-      <p>Cuento con experiencia real en agencia SEO/SEM, mantenimiento de redes corporativas y soporte técnico presencial y remoto. Actualmente trabajo como técnico IT en Merlos Soluciones Tecnológicas.</p>
-      <p>Me definen mi actitud proactiva, atención al detalle y capacidad para resolver problemas con creatividad técnica.</p>
+      <p data-es="Soy un desarrollador full stack con formación en CFGS de Desarrollo de Aplicaciones Web, complementada con un sólido background en sistemas y redes. Esto me permite entender los proyectos desde la interfaz hasta la infraestructura." data-en="I'm a full stack developer with a degree in Web Application Development, complemented by a solid background in systems and networking. This allows me to understand projects from the interface all the way down to the infrastructure.">Soy un desarrollador full stack con formación en CFGS de Desarrollo de Aplicaciones Web, complementada con un sólido background en sistemas y redes. Esto me permite entender los proyectos desde la interfaz hasta la infraestructura.</p>
+      <p data-es="Cuento con experiencia real en agencia SEO/SEM, mantenimiento de redes corporativas y soporte técnico presencial y remoto. Actualmente trabajo como técnico IT en Merlos Soluciones Tecnológicas." data-en="I have real-world experience in SEO/SEM agencies, corporate network maintenance, and both on-site and remote technical support. I currently work as an IT technician at Merlos Soluciones Tecnológicas.">Cuento con experiencia real en agencia SEO/SEM, mantenimiento de redes corporativas y soporte técnico presencial y remoto. Actualmente trabajo como técnico IT en Merlos Soluciones Tecnológicas.</p>
+      <p data-es="Me definen mi actitud proactiva, atención al detalle y capacidad para resolver problemas con creatividad técnica." data-en="I'm defined by my proactive attitude, attention to detail, and ability to solve problems with technical creativity.">Me definen mi actitud proactiva, atención al detalle y capacidad para resolver problemas con creatividad técnica.</p>
     </div>
   </div>
   <div>
     <div class="about-stats reveal">
       <div class="stat">
         <div class="stat-num">5+</div>
-        <div class="stat-label">Años formándome</div>
+        <div class="stat-label" data-es="Años formándome" data-en="Years of training">Años formándome</div>
       </div>
       <div class="stat">
         <div class="stat-num">20+</div>
-        <div class="stat-label">Tecnologías</div>
+        <div class="stat-label" data-es="Tecnologías" data-en="Technologies">Tecnologías</div>
       </div>
       <div class="stat">
         <div class="stat-num">7</div>
-        <div class="stat-label">Certificaciones</div>
+        <div class="stat-label" data-es="Certificaciones" data-en="Certifications">Certificaciones</div>
       </div>
       <div class="stat">
         <div class="stat-num">B1/B2</div>
-        <div class="stat-label">Inglés</div>
+        <div class="stat-label" data-es="Inglés" data-en="English">Inglés</div>
       </div>
     </div>
   </div>
@@ -702,11 +791,11 @@
 
 <!-- SKILLS -->
 <section id="skills">
-  <p class="section-label reveal">02 — Skills</p>
-  <h2 class="section-title reveal">Stack técnico</h2>
+  <p class="section-label reveal" data-es="02 — Skills" data-en="02 — Skills">02 — Skills</p>
+  <h2 class="section-title reveal" data-es="Stack técnico" data-en="Tech stack">Stack técnico</h2>
   <div class="skills-grid">
     <div class="skill-category reveal">
-      <div class="skill-cat-title fe">Frontend</div>
+      <div class="skill-cat-title fe" data-es="Frontend" data-en="Frontend">Frontend</div>
       <div class="skill-items">
         <div class="skill-item">HTML / CSS</div>
         <div class="skill-item">JavaScript</div>
@@ -720,7 +809,7 @@
       </div>
     </div>
     <div class="skill-category reveal">
-      <div class="skill-cat-title be">Backend</div>
+      <div class="skill-cat-title be" data-es="Backend" data-en="Backend">Backend</div>
       <div class="skill-items">
         <div class="skill-item">Node.js</div>
         <div class="skill-item">Python</div>
@@ -734,7 +823,7 @@
       </div>
     </div>
     <div class="skill-category reveal">
-      <div class="skill-cat-title db">Bases de datos</div>
+      <div class="skill-cat-title db" data-es="Bases de datos" data-en="Databases">Bases de datos</div>
       <div class="skill-items">
         <div class="skill-item">PostgreSQL</div>
         <div class="skill-item">MySQL</div>
@@ -746,16 +835,16 @@
       </div>
     </div>
     <div class="skill-category reveal">
-      <div class="skill-cat-title de">Otros</div>
+      <div class="skill-cat-title de" data-es="Otros" data-en="Other">Otros</div>
       <div class="skill-items">
-        <div class="skill-item">Figma (UI/UX)</div>
-        <div class="skill-item">Godot (Game Dev)</div>
-        <div class="skill-item">Cisco Networking</div>
-        <div class="skill-item">Microsoft Azure</div>
-        <div class="skill-item">3CX VOIP</div>
-        <div class="skill-item">Active Directory</div>
-        <div class="skill-item">SEO / SEM</div>
-        <div class="skill-item">Mantenimiento IT</div>
+        <div class="skill-item" data-es="Figma (UI/UX)" data-en="Figma (UI/UX)">Figma (UI/UX)</div>
+        <div class="skill-item" data-es="Godot (Game Dev)" data-en="Godot (Game Dev)">Godot (Game Dev)</div>
+        <div class="skill-item" data-es="Cisco Networking" data-en="Cisco Networking">Cisco Networking</div>
+        <div class="skill-item" data-es="Microsoft Azure" data-en="Microsoft Azure">Microsoft Azure</div>
+        <div class="skill-item" data-es="3CX VOIP" data-en="3CX VOIP">3CX VOIP</div>
+        <div class="skill-item" data-es="Active Directory" data-en="Active Directory">Active Directory</div>
+        <div class="skill-item" data-es="SEO / SEM" data-en="SEO / SEM">SEO / SEM</div>
+        <div class="skill-item" data-es="Mantenimiento IT" data-en="IT Maintenance">Mantenimiento IT</div>
       </div>
     </div>
   </div>
@@ -763,39 +852,39 @@
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <p class="section-label reveal">03 — Experiencia</p>
-  <h2 class="section-title reveal">Trabajo real</h2>
+  <p class="section-label reveal" data-es="03 — Experiencia" data-en="03 — Experience">03 — Experiencia</p>
+  <h2 class="section-title reveal" data-es="Trabajo real" data-en="Real work">Trabajo real</h2>
   <div class="experience-grid">
     <div class="exp-card reveal">
-      <div class="exp-date">Jul 2025 — Actualidad</div>
+      <div class="exp-date" data-es="Jul 2025 — Actualidad" data-en="Jul 2025 — Present">Jul 2025 — Actualidad</div>
       <div>
         <div class="exp-company">Merlos Soluciones Tecnológicas</div>
-        <div class="exp-role">Técnico IT — Remoto & Campo</div>
-        <div class="exp-desc">Soporte técnico presencial y remoto. Instalación y mantenimiento de centralitas 3CX, gestión de redes y resolución de incidencias IT en entornos corporativos.</div>
+        <div class="exp-role" data-es="Técnico IT — Remoto & Campo" data-en="IT Technician — Remote & On-site">Técnico IT — Remoto & Campo</div>
+        <div class="exp-desc" data-es="Soporte técnico presencial y remoto. Instalación y mantenimiento de centralitas 3CX, gestión de redes y resolución de incidencias IT en entornos corporativos." data-en="On-site and remote technical support. Installation and maintenance of 3CX PBX systems, network management, and IT incident resolution in corporate environments.">Soporte técnico presencial y remoto. Instalación y mantenimiento de centralitas 3CX, gestión de redes y resolución de incidencias IT en entornos corporativos.</div>
       </div>
     </div>
     <div class="exp-card reveal">
-      <div class="exp-date">Jun 2024 — Abr 2025</div>
+      <div class="exp-date" data-es="Jun 2024 — Abr 2025" data-en="Jun 2024 — Apr 2025">Jun 2024 — Abr 2025</div>
       <div>
         <div class="exp-company">Posicionamiento Web Barcelona</div>
-        <div class="exp-role">SEO / SEM — FCT + Contrato</div>
-        <div class="exp-desc">Optimización y planificación de contenidos basada en análisis de palabras clave. Trabajo en agencia especializada en posicionamiento web y marketing digital.</div>
+        <div class="exp-role" data-es="SEO / SEM — FCT + Contrato" data-en="SEO / SEM — Internship + Contract">SEO / SEM — FCT + Contrato</div>
+        <div class="exp-desc" data-es="Optimización y planificación de contenidos basada en análisis de palabras clave. Trabajo en agencia especializada en posicionamiento web y marketing digital." data-en="Content optimization and planning based on keyword analysis. Work at an agency specializing in web positioning and digital marketing.">Optimización y planificación de contenidos basada en análisis de palabras clave. Trabajo en agencia especializada en posicionamiento web y marketing digital.</div>
       </div>
     </div>
     <div class="exp-card reveal">
-      <div class="exp-date">5 meses</div>
+      <div class="exp-date" data-es="5 meses" data-en="5 months">5 meses</div>
       <div>
         <div class="exp-company">Col·legi Singuerlin</div>
-        <div class="exp-role">Técnico de redes y equipos — FCT</div>
-        <div class="exp-desc">Mantenimiento, instalación y reparación de equipos informáticos y red en entorno educativo. Prácticas del ciclo CFGM de Sistemas Microinformáticos y Redes.</div>
+        <div class="exp-role" data-es="Técnico de redes y equipos — FCT" data-en="Network & Equipment Technician — Internship">Técnico de redes y equipos — FCT</div>
+        <div class="exp-desc" data-es="Mantenimiento, instalación y reparación de equipos informáticos y red en entorno educativo. Prácticas del ciclo CFGM de Sistemas Microinformáticos y Redes." data-en="Maintenance, installation and repair of computer equipment and networks in an educational environment. Internship for the IT Systems and Networks vocational degree.">Mantenimiento, instalación y reparación de equipos informáticos y red en entorno educativo. Prácticas del ciclo CFGM de Sistemas Microinformáticos y Redes.</div>
       </div>
     </div>
     <div class="exp-card reveal">
-      <div class="exp-date">10 meses</div>
+      <div class="exp-date" data-es="10 meses" data-en="10 months">10 meses</div>
       <div>
         <div class="exp-company">Mercadona</div>
-        <div class="exp-role">Cajero / Reponedor</div>
-        <div class="exp-desc">Atención al cliente, gestión de caja y reposición. Trabajo en equipo en entorno de alta demanda. Desarrollo de habilidades interpersonales y organización.</div>
+        <div class="exp-role" data-es="Cajero / Reponedor" data-en="Cashier / Stock Replenisher">Cajero / Reponedor</div>
+        <div class="exp-desc" data-es="Atención al cliente, gestión de caja y reposición. Trabajo en equipo en entorno de alta demanda. Desarrollo de habilidades interpersonales y organización." data-en="Customer service, cash management, and stock replenishment. Teamwork in a high-demand environment. Development of interpersonal and organizational skills.">Atención al cliente, gestión de caja y reposición. Trabajo en equipo en entorno de alta demanda. Desarrollo de habilidades interpersonales y organización.</div>
       </div>
     </div>
   </div>
@@ -803,156 +892,156 @@
 
 <!-- CERTIFICATIONS -->
 <section id="certifications">
-  <p class="section-label reveal">04 — Certificaciones</p>
-  <h2 class="section-title reveal">Formación certificada <span style="color:var(--accent);font-family:var(--font-mono);font-size:1.5rem;">25</span></h2>
+  <p class="section-label reveal" data-es="04 — Certificaciones" data-en="04 — Certifications">04 — Certificaciones</p>
+  <h2 class="section-title reveal" data-es="Formación certificada" data-en="Certified training">Formación certificada <span style="color:var(--accent);font-family:var(--font-mono);font-size:1.5rem;">25</span></h2>
 
   <div class="cert-filters reveal">
-    <button class="cert-filter active" data-filter="all">Todas</button>
-    <button class="cert-filter" data-filter="microsoft">Microsoft</button>
-    <button class="cert-filter" data-filter="cisco">Cisco / Redes</button>
-    <button class="cert-filter" data-filter="cyber">Ciberseguridad</button>
-    <button class="cert-filter" data-filter="dev">Desarrollo</button>
-    <button class="cert-filter" data-filter="it">Soporte IT</button>
+    <button class="cert-filter active" data-filter="all" data-es="Todas" data-en="All">Todas</button>
+    <button class="cert-filter" data-filter="microsoft" data-es="Microsoft" data-en="Microsoft">Microsoft</button>
+    <button class="cert-filter" data-filter="cisco" data-es="Cisco / Redes" data-en="Cisco / Networks">Cisco / Redes</button>
+    <button class="cert-filter" data-filter="cyber" data-es="Ciberseguridad" data-en="Cybersecurity">Ciberseguridad</button>
+    <button class="cert-filter" data-filter="dev" data-es="Desarrollo" data-en="Development">Desarrollo</button>
+    <button class="cert-filter" data-filter="it" data-es="Soporte IT" data-en="IT Support">Soporte IT</button>
   </div>
 
   <div class="certs-grid" id="certsGrid">
     <div class="cert-card reveal" data-cat="microsoft">
       <div class="cert-badge ms">MS</div>
-      <div class="cert-name">Administrar reuniones y llamadas en Microsoft Teams</div>
+      <div class="cert-name" data-es="Administrar reuniones y llamadas en Microsoft Teams" data-en="Manage meetings and calls in Microsoft Teams">Administrar reuniones y llamadas en Microsoft Teams</div>
       <div class="cert-skill">Microsoft Teams · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft">
       <div class="cert-badge ms">MS</div>
-      <div class="cert-name">AZ-104: Administración de identidades y gobernanza en Azure</div>
+      <div class="cert-name" data-es="AZ-104: Administración de identidades y gobernanza en Azure" data-en="AZ-104: Managing identities and governance in Azure">AZ-104: Administración de identidades y gobernanza en Azure</div>
       <div class="cert-skill">Microsoft Azure · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft">
       <div class="cert-badge ms">MS</div>
-      <div class="cert-name">MS-721: Planeamiento y diseño de sistemas de comunicaciones de Teams</div>
+      <div class="cert-name" data-es="MS-721: Planeamiento y diseño de sistemas de comunicaciones de Teams" data-en="MS-721: Planning and design of Teams communication systems">MS-721: Planeamiento y diseño de sistemas de comunicaciones de Teams</div>
       <div class="cert-skill">Microsoft Teams · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft">
       <div class="cert-badge ms">MS</div>
-      <div class="cert-name">Azure: Introducción a la nube de Microsoft</div>
+      <div class="cert-name" data-es="Azure: Introducción a la nube de Microsoft" data-en="Azure: Introduction to the Microsoft cloud">Azure: Introducción a la nube de Microsoft</div>
       <div class="cert-skill">Microsoft Azure</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft cyber">
       <div class="cert-badge ms">MS</div>
-      <div class="cert-name">Seguridad de Microsoft Esencial: Conceptos y Protección con IA</div>
-      <div class="cert-skill">Ciberseguridad · Seguridad Microsoft</div>
+      <div class="cert-name" data-es="Seguridad de Microsoft Esencial: Conceptos y Protección con IA" data-en="Essential Microsoft Security: AI Concepts and Protection">Seguridad de Microsoft Esencial: Conceptos y Protección con IA</div>
+      <div class="cert-skill" data-es="Ciberseguridad · Seguridad Microsoft" data-en="Cybersecurity · Microsoft Security">Ciberseguridad · Seguridad Microsoft</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft">
       <div class="cert-badge ms">MS</div>
-      <div class="cert-name">Windows Server 2016: Active Directory</div>
+      <div class="cert-name" data-es="Windows Server 2016: Active Directory" data-en="Windows Server 2016: Active Directory">Windows Server 2016: Active Directory</div>
       <div class="cert-skill">Windows Server</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Microsoft 365 para administradores: Monitorización y solución de problemas</div>
+      <div class="cert-name" data-es="Microsoft 365 para administradores: Monitorización y solución de problemas" data-en="Microsoft 365 for admins: Monitoring and troubleshooting">Microsoft 365 para administradores: Monitorización y solución de problemas</div>
       <div class="cert-skill">Microsoft 365 · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Microsoft SharePoint Online: Administración</div>
+      <div class="cert-name" data-es="Microsoft SharePoint Online: Administración" data-en="Microsoft SharePoint Online: Administration">Microsoft SharePoint Online: Administración</div>
       <div class="cert-skill">SharePoint · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Windows 11 para profesionales IT: Administración local</div>
+      <div class="cert-name" data-es="Windows 11 para profesionales IT: Administración local" data-en="Windows 11 for IT professionals: Local administration">Windows 11 para profesionales IT: Administración local</div>
       <div class="cert-skill">Windows 11 · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="microsoft it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Windows Server: DNS</div>
+      <div class="cert-name" data-es="Windows Server: DNS" data-en="Windows Server: DNS">Windows Server: DNS</div>
       <div class="cert-skill">DNS · Windows Server · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="cisco">
       <div class="cert-badge cx">3CX</div>
-      <div class="cert-name">3CX Basic Certified Engineer</div>
-      <div class="cert-skill">Instalación y mantenimiento de centralitas 3CX</div>
+      <div class="cert-name" data-es="3CX Basic Certified Engineer" data-en="3CX Basic Certified Engineer">3CX Basic Certified Engineer</div>
+      <div class="cert-skill" data-es="Instalación y mantenimiento de centralitas 3CX" data-en="Installation and maintenance of 3CX PBX systems">Instalación y mantenimiento de centralitas 3CX</div>
     </div>
     <div class="cert-card reveal" data-cat="cisco">
       <div class="cert-badge cc">CC</div>
-      <div class="cert-name">Acceso a Redes — Cisco CCNA</div>
-      <div class="cert-skill">Gestión de redes · NAC</div>
+      <div class="cert-name" data-es="Acceso a Redes — Cisco CCNA" data-en="Network Access — Cisco CCNA">Acceso a Redes — Cisco CCNA</div>
+      <div class="cert-skill" data-es="Gestión de redes · NAC" data-en="Network management · NAC">Gestión de redes · NAC</div>
     </div>
     <div class="cert-card reveal" data-cat="cisco">
       <div class="cert-badge cc">CC</div>
-      <div class="cert-name">Conectividad IP — Cisco CCNA</div>
-      <div class="cert-skill">Conectividad de red · Protocolo IP</div>
+      <div class="cert-name" data-es="Conectividad IP — Cisco CCNA" data-en="IP Connectivity — Cisco CCNA">Conectividad IP — Cisco CCNA</div>
+      <div class="cert-skill" data-es="Conectividad de red · Protocolo IP" data-en="Network connectivity · IP protocol">Conectividad de red · Protocolo IP</div>
     </div>
     <div class="cert-card reveal" data-cat="cisco">
       <div class="cert-badge cc">CC</div>
-      <div class="cert-name">Fundamentos de Redes — Cisco CCNA</div>
-      <div class="cert-skill">Cisco Networking · Interconexión de red</div>
+      <div class="cert-name" data-es="Fundamentos de Redes — Cisco CCNA" data-en="Network Fundamentals — Cisco CCNA">Fundamentos de Redes — Cisco CCNA</div>
+      <div class="cert-skill" data-es="Cisco Networking · Interconexión de red" data-en="Cisco Networking · Network interconnection">Cisco Networking · Interconexión de red</div>
     </div>
     <div class="cert-card reveal" data-cat="cisco">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Servicios IP (Cisco CCNA)</div>
-      <div class="cert-skill">Servicios de redes · Protocolo IP · Dic 2025</div>
+      <div class="cert-name" data-es="Servicios IP (Cisco CCNA)" data-en="IP Services (Cisco CCNA)">Servicios IP (Cisco CCNA)</div>
+      <div class="cert-skill" data-es="Servicios de redes · Protocolo IP · Dic 2025" data-en="Network services · IP protocol · Dec 2025">Servicios de redes · Protocolo IP · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="cisco">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Fundamentos de protocolos de red: HTTP y HTTPs</div>
+      <div class="cert-name" data-es="Fundamentos de protocolos de red: HTTP y HTTPs" data-en="Network protocol fundamentals: HTTP and HTTPS">Fundamentos de protocolos de red: HTTP y HTTPs</div>
       <div class="cert-skill">HTTP · HTTPS · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="cyber">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Fundamentos de ciberseguridad</div>
-      <div class="cert-skill">Ciberseguridad · Dic 2025</div>
+      <div class="cert-name" data-es="Fundamentos de ciberseguridad" data-en="Cybersecurity fundamentals">Fundamentos de ciberseguridad</div>
+      <div class="cert-skill" data-es="Ciberseguridad · Dic 2025" data-en="Cybersecurity · Dec 2025">Ciberseguridad · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="cyber">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Concienciación en ciberseguridad: Terminología</div>
-      <div class="cert-skill">Ciberseguridad · Seguridad de la información · Ene 2026</div>
+      <div class="cert-name" data-es="Concienciación en ciberseguridad: Terminología" data-en="Cybersecurity awareness: Terminology">Concienciación en ciberseguridad: Terminología</div>
+      <div class="cert-skill" data-es="Ciberseguridad · Seguridad de la información · Ene 2026" data-en="Cybersecurity · Information security · Jan 2026">Ciberseguridad · Seguridad de la información · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="cyber">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Panorámica de amenazas a la ciberseguridad</div>
-      <div class="cert-skill">Ciberseguridad · Gestión de riesgos IT · Dic 2025</div>
+      <div class="cert-name" data-es="Panorámica de amenazas a la ciberseguridad" data-en="Overview of cybersecurity threats">Panorámica de amenazas a la ciberseguridad</div>
+      <div class="cert-skill" data-es="Ciberseguridad · Gestión de riesgos IT · Dic 2025" data-en="Cybersecurity · IT risk management · Dec 2025">Ciberseguridad · Gestión de riesgos IT · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="dev">
       <div class="cert-badge ow">OW</div>
-      <div class="cert-name">Fundamentos de JavaScript</div>
+      <div class="cert-name" data-es="Fundamentos de JavaScript" data-en="JavaScript Fundamentals">Fundamentos de JavaScript</div>
       <div class="cert-skill">JavaScript · OpenWebinars · Jun 2025 · 8h</div>
     </div>
     <div class="cert-card reveal" data-cat="it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Conviértete en especialista en soporte IT</div>
-      <div class="cert-skill">ITIL · Gestión TI · Sistemas operativos · Ene 2026</div>
+      <div class="cert-name" data-es="Conviértete en especialista en soporte IT" data-en="Become an IT support specialist">Conviértete en especialista en soporte IT</div>
+      <div class="cert-skill" data-es="ITIL · Gestión TI · Sistemas operativos · Ene 2026" data-en="ITIL · IT management · Operating systems · Jan 2026">ITIL · Gestión TI · Sistemas operativos · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Soporte IT: Trucos</div>
-      <div class="cert-skill">Soporte técnico · Ene 2026</div>
+      <div class="cert-name" data-es="Soporte IT: Trucos" data-en="IT Support: Tips & Tricks">Soporte IT: Trucos</div>
+      <div class="cert-skill" data-es="Soporte técnico · Ene 2026" data-en="Technical support · Jan 2026">Soporte técnico · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Fundamentos de la atención al cliente para profesionales IT</div>
-      <div class="cert-skill">Gestión de servicios TI · Ene 2026</div>
+      <div class="cert-name" data-es="Fundamentos de la atención al cliente para profesionales IT" data-en="Customer service fundamentals for IT professionals">Fundamentos de la atención al cliente para profesionales IT</div>
+      <div class="cert-skill" data-es="Gestión de servicios TI · Ene 2026" data-en="IT service management · Jan 2026">Gestión de servicios TI · Ene 2026</div>
     </div>
     <div class="cert-card reveal" data-cat="it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Fundamentos de la gestión de proyectos: Requisitos</div>
-      <div class="cert-skill">Gestión de proyectos · Dic 2025</div>
+      <div class="cert-name" data-es="Fundamentos de la gestión de proyectos: Requisitos" data-en="Project management fundamentals: Requirements">Fundamentos de la gestión de proyectos: Requisitos</div>
+      <div class="cert-skill" data-es="Gestión de proyectos · Dic 2025" data-en="Project management · Dec 2025">Gestión de proyectos · Dic 2025</div>
     </div>
     <div class="cert-card reveal" data-cat="it">
       <div class="cert-badge li">LI</div>
-      <div class="cert-name">Plesk para administradores de sistemas</div>
-      <div class="cert-skill">Plesk · Administración de servidores · Ene 2026</div>
+      <div class="cert-name" data-es="Plesk para administradores de sistemas" data-en="Plesk for system administrators">Plesk para administradores de sistemas</div>
+      <div class="cert-skill" data-es="Plesk · Administración de servidores · Ene 2026" data-en="Plesk · Server administration · Jan 2026">Plesk · Administración de servidores · Ene 2026</div>
     </div>
   </div>
 </section>
 
 <!-- EDUCATION -->
 <section id="education">
-  <p class="section-label reveal">05 — Educación</p>
-  <h2 class="section-title reveal">Formación académica</h2>
+  <p class="section-label reveal" data-es="05 — Educación" data-en="05 — Education">05 — Educación</p>
+  <h2 class="section-title reveal" data-es="Formación académica" data-en="Academic background">Formación académica</h2>
   <div class="edu-list">
     <div class="edu-item reveal">
       <div class="edu-num">01</div>
       <div>
-        <div class="edu-title">CFGS Desarrollo de Aplicaciones Web</div>
+        <div class="edu-title" data-es="CFGS Desarrollo de Aplicaciones Web" data-en="Higher Vocational Degree in Web Application Development">CFGS Desarrollo de Aplicaciones Web</div>
         <div class="edu-school">INS La Pineda</div>
       </div>
       <div class="edu-year">2023 — 2025</div>
@@ -960,7 +1049,7 @@
     <div class="edu-item reveal">
       <div class="edu-num">02</div>
       <div>
-        <div class="edu-title">CFGM Sistemas Microinformáticos y Redes</div>
+        <div class="edu-title" data-es="CFGM Sistemas Microinformáticos y Redes" data-en="Vocational Degree in Microcomputer Systems and Networks">CFGM Sistemas Microinformáticos y Redes</div>
         <div class="edu-school">Col·legi Cultural Badalona</div>
       </div>
       <div class="edu-year">2020 — 2022</div>
@@ -968,7 +1057,7 @@
     <div class="edu-item reveal">
       <div class="edu-num">03</div>
       <div>
-        <div class="edu-title">Educación Secundaria Obligatoria</div>
+        <div class="edu-title" data-es="Educación Secundaria Obligatoria" data-en="Secondary Education">Educación Secundaria Obligatoria</div>
         <div class="edu-school">Escola Cultural Badalona</div>
       </div>
       <div class="edu-year">2016 — 2020</div>
@@ -979,9 +1068,9 @@
 <!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner">
-    <p class="section-label reveal" style="justify-content:center;">06 — Contacto</p>
-    <h2 class="section-title reveal">¿Hablamos?</h2>
-    <p class="about-text reveal" style="max-width:420px;margin:0 auto;">Disponible para proyectos freelance, nuevas oportunidades laborales o simplemente una buena conversación técnica.</p>
+    <p class="section-label reveal" style="justify-content:center;" data-es="06 — Contacto" data-en="06 — Contact">06 — Contacto</p>
+    <h2 class="section-title reveal" data-es="¿Hablamos?" data-en="Let's talk?">¿Hablamos?</h2>
+    <p class="about-text reveal" style="max-width:420px;margin:0 auto;" data-es="Disponible para proyectos freelance, nuevas oportunidades laborales o simplemente una buena conversación técnica." data-en="Available for freelance projects, new job opportunities, or just a good technical conversation.">Disponible para proyectos freelance, nuevas oportunidades laborales o simplemente una buena conversación técnica.</p>
     <a href="mailto:ikernavas608@gmail.com" class="contact-email reveal">ikernavas608@gmail.com</a>
     <div class="social-links reveal">
       <a href="https://www.linkedin.com/in/ikernavas/" target="_blank" class="social-link">
@@ -1035,9 +1124,7 @@
   // Scroll reveal
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+      if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
@@ -1067,13 +1154,63 @@
       const filter = btn.dataset.filter;
       document.querySelectorAll('.cert-card').forEach(card => {
         const cat = card.dataset.cat || '';
-        if (filter === 'all' || cat.includes(filter)) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
+        card.classList.toggle('hidden', filter !== 'all' && !cat.includes(filter));
       });
     });
+  });
+
+  // ── TRANSLATE BUTTON ──
+  const translateBtn = document.getElementById('translateBtn');
+  const translateLabel = document.getElementById('translateLabel');
+  const toast = document.getElementById('translateToast');
+  let isEnglish = false;
+  let toastTimeout;
+
+  function showToast(msg) {
+    clearTimeout(toastTimeout);
+    toast.textContent = msg;
+    toast.classList.add('show');
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  function applyLanguage(lang) {
+    document.querySelectorAll('[data-es][data-en]').forEach(el => {
+      const val = el.dataset[lang];
+      if (!val) return;
+      // Handle elements that may contain HTML (like <br>)
+      if (val.includes('<')) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+  }
+
+  translateBtn.addEventListener('click', async () => {
+    if (isEnglish) {
+      // Switch back to Spanish — instant, no API needed
+      applyLanguage('es');
+      isEnglish = false;
+      translateLabel.textContent = 'EN';
+      translateBtn.title = 'Translate to English';
+      showToast('↩ Volviendo al español');
+      return;
+    }
+
+    // Check if EN translations are already pre-loaded (they are via data-en attributes)
+    translateBtn.disabled = true;
+    translateBtn.innerHTML = '<span class="btn-spinner"></span><span>translating...</span>';
+    showToast('⟳ Translating...');
+
+    // Small artificial delay for UX polish, then apply
+    await new Promise(r => setTimeout(r, 400));
+
+    applyLanguage('en');
+    isEnglish = true;
+    translateBtn.disabled = false;
+    translateBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M2 5h7M5 2v3M11 5c-.667 2.667-2.333 4.667-4 6M7.5 9c.833.833 2 1.5 3.5 2"/><path d="M13 19l2-5 2 5M14.6 17h2.8M20 5h-8M16 5v3"/></svg><span id="translateLabel">ES</span>`;
+    translateBtn.title = 'Ver en español';
+    showToast('✓ Translated to English');
   });
 </script>
 </body>
